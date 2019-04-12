@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Check Github</title>
+    </head>
+    <body>
+    <form onsubmit="event.preventDefault(); checkGithub()" method="post">
+        <label for="userName">Username: </label>
+        <input id="userName" name="userName" type="text" required>
+        <br>
+        <label for="passWord">Password: </label>
+        <input id="passWord" name="passWord" type="password">
+        <br>
+        <button type="submit">Check your Github</button>
+    </form>
+    <script>
+
+        // Build the list of files to check for.
+        var neededFiles=[
+            'welcome.html',
+            'forms.html',
+            'css/style.css',
+            'css_selectors.html',
+            'css/selectors.css',
+            'login-form.html',
+            'css/login.css',
+            'twitter.html',
+            'css/twitter.css',
+            'media-queries.html',
+            'css/media-queries.css',
+            'grid-layout.html',
+            'css/grid-layout.css',
+            'order-pizza.html',
+            'inline_js.html',
+            'external_js.html',
+            'js/external.js',
+            'functions_js.html',
+            'js/functions.js',
+            'conditionals.html',
+            'js/conditionals.js',
+            'loops.html',
+            'js/while.js',
+            'js/for_loops.js',
+            'js/break_and_continue.js',
+            'iterating_arrays_js.html',
+            'js/iterating.js',
+            'planets-js.html',
+            'js/planets-array.js',
+            'split-join.html',
+            'js/planets-string.js',
+            'objects.html',
+            'js/objects.js',
+            'math-js.html',
+            'js/circle.js'
+        ];
+
+        var data;
+
+        function updatePage(){
+            // Don't create the header if it already exists
+            var header;
+            if (!document.getElementById('MFHeader')){
+                header = document.createElement("h1");
+                header.id = "MFHeader";
+                header.innerText = "Missing Files:";
+                document.body.appendChild(header);
+            }else{
+                header=document.getElementById('MFHeader');
+            }
+            var neededFileList;
+            // Dont create the list if it already exists. Otherwise, clear it.
+            if (!document.getElementById('neededFileList')) {
+                neededFileList = document.createElement("ul");
+                neededFileList.id = "neededFileList";
+                document.body.appendChild(neededFileList);
+            }else{
+                neededFileList=document.getElementById('neededFileList');
+                neededFileList.innerHTML="";
+            }
+            console.log(neededFileList);
+
+            // If data is not empty, build the list and populate it on the page.
+            if (data !=='') {
+                if(neededFileList>0) {
+                    for (var i = 0; i < neededFiles.length; i++) {
+                        var fileName = neededFiles[i];
+                        neededFileList.innerHTML += "<li>" + fileName + "</li>";
+                    }
+                }else{
+                    header.innerHTML="No missing files!";
+                }
+            }else{
+                header.innerHTML="Error!";
+                neededFileList.innerHTML="ERROR: Was not able to retrieve data from Github.";
+            }
+        }
+        function checkGithub() {
+            // Get Username and Password
+            var userName=document.getElementById('userName').value;
+            var passWord=document.getElementById('passWord').value;
+
+            // Build the request URL
+            var gitUrl = "https://api.github.com/repos/"+userName + "/codeup-web-exercises/git/trees/master?recursive=1";
+
+
+            var request = new XMLHttpRequest();
+            // Open a new connection, using the GET request on the URL endpoint
+            request.open('GET', gitUrl, false);
+
+            // Set the header to include the Basic Authorization with your username and password
+            request.setRequestHeader("Authorization", "Basic " + btoa(userName + ":" + passWord));
+
+            // Process the data once it's loaded/returned.
+            request.onload = function () {
+                // Begin accessing JSON data here
+                data = JSON.parse(this.response);
+                if (request.status >= 200 && request.status < 400) {
+                    data["tree"].forEach(function(item){
+                        if (item.type ==="blob"){
+                            console.log(item.path);
+                            // Remove just the file we found from the list.
+                            var index = neededFiles.indexOf(item.path);
+                            if (index !== -1) neededFiles.splice(index, 1);
+                        }
+                    });
+                } else {
+                    //An error was thrown. Reset data to ''
+                    console.log('error');
+                    data='';
+                }
+            };
+            // Send request
+            request.send();
+            
+            updatePage();
+            return false;
+        }
+    </script>
+    </body>
+</html>
