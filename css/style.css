@@ -1,0 +1,37 @@
+html,body{
+    height:100%;
+    margin:0px;
+    font-family: Roboto, sans-serif;
+    font-size:0.75em;
+    background-color:#000022;
+}
+.page{
+    height:100%;
+}
+.upper{
+    text-transform: uppercase;
+}
+.hDesc{
+    letter-spacing: 1px;
+}
+#hName{
+    letter-spacing: 9px;
+}
+#jumpAround{
+    position:fixed;
+    bottom:10px;
+    text-align:center;
+    width:100%;
+}
+#jumpDown, #jumpUp{
+    cursor:pointer;
+}
+#firstPage{
+    background-color:red;
+}
+#secondPage{
+    background-color:blue;
+}
+#thirdPage{
+    background-color:green;
+}
