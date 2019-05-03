@@ -1,31 +1,51 @@
-const getDivTop = (element,withScroll=false)=>{
+const getDivTop = (element,withScroll=false,fromWindow=false)=>{
     let yPos;
-    yPos = withScroll ? $(element).offset().top : $(element).position().top;
+    if(withScroll) {
+        if(fromWindow){
+            yPos = $(element).offset().top - $(window).height();
+            console.log(yPos);
+        }else {
+            yPos = $(element).offset().top;
+        }
+    }else{
+        yPos = $(element).position().top;
+    }
     return yPos;
 };
+let scrolling=false;
 const scrollTo = yPos =>{
     $('html,body').animate({
             scrollTop: yPos
-        }, 'slow');
+        }, 'slow',()=>{scrolling=false;});
 };
 $('#jumpDown').click(()=>{
-    let nextPage;
-    $(".page").each((index,curDiv)=>{
-        if(getDivTop(curDiv) > getDivTop($("#jumpDown"),true)) {
-            nextPage = curDiv;
-            return false;
+    if(!scrolling) {
+        scrolling = true;
+        let nextPage;
+        $(".page").each((index, curDiv) => {
+            if (getDivTop(curDiv) > getDivTop($("#jumpDown"), true)) {
+                nextPage = curDiv;
+                return false;
+            }
+        });
+        if (nextPage) {
+            scrollTo(getDivTop(nextPage));
+        } else {
+            scrollTo(getDivTop($('.page').slice(-1)));
         }
-    });
-    if(nextPage)
-        scrollTo(getDivTop(nextPage));
+    }
 });
 $('#jumpUp').click(()=>{
-    let nextPage;
-    $(".page").each((index,curDiv)=>{
-        if(getDivTop(curDiv) < getDivTop($("#jumpUp"),true)) {
-            nextPage = index;
+    if(!scrolling) {
+        let nextPage;
+        $(".page").each((index, curDiv) => {
+            if (getDivTop(curDiv) < getDivTop($("#jumpUp"), true)) {
+                nextPage = index;
+            }
+        });
+        if (nextPage) {
+            scrollTo(getDivTop($(".page")[nextPage - 1]));
+            scrolling = true;
         }
-    });
-    if(nextPage)
-        scrollTo(getDivTop($(".page")[nextPage-1]));
+    }
 });
