@@ -16,7 +16,7 @@ let scrolling=false;
 const scrollTo = yPos =>{
     $('html,body').animate({
             scrollTop: yPos
-        }, 'slow',()=>{scrolling=false;});
+        }, 600,()=>{scrolling=false;});
 };
 $('#jumpDown').click(()=>{
     if(!scrolling) {
