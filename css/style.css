@@ -12,10 +12,12 @@ html,body{
     --light-text-color2:#eeeebb;
     --mid-text-color:#999;
 
-    --gradient-bg:linear-gradient(95deg, #ccc, #888);
+    --gradient-bg:linear-gradient(90deg, #ccc, #888);
 }
 .page{
     height:100%;
+    min-height:400px;
+    min-width:325px;
 }
 .upper{
     text-transform: uppercase;
@@ -23,10 +25,23 @@ html,body{
 .hDesc{
     letter-spacing: 1px;
 }
+#ScrollBar{
+    position:fixed;
+    top:0;
+    background-color: #ff4444;
+    height:8px;
+    z-index: 1000;
+    transition:all 0.1s ease-out;
+}
+.roundSB{
+    border-radius: 0 10px 10px 0;
+}
 #hName{
     letter-spacing: 10px;
     padding-left:9px;
 }
+
+
 #headshot{
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -42,6 +57,7 @@ html,body{
     top:-10%;
     left:-10%;
 }
+
 #jumpAround{
     position:fixed;
     bottom:10px;
@@ -62,6 +78,8 @@ html,body{
     transform:scale(1.15);
     color:var(--light-text-color2);
 }
+
+
 .page:nth-of-type(2n){
     background-color:var(--light-bg-color);
     background-image:var(--gradient-bg);
@@ -75,4 +93,46 @@ html,body{
     text-align: center;
     font-size:2em;
     width:50%;
+}
+
+
+/*
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+}
+
+/*
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+
+}
+
+/*
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+    #headshot{
+        width:150px;
+        height:150px;
+    }
+    .page{
+        max-height:94%;
+    }
+}
+@media (max-width: 319px) {
+
+    #headshot{
+        width:100px;
+        height:100px;
+    }
+
 }
